@@ -1,3 +1,4 @@
 diff/*
 *.o
 dwm
+config.h
