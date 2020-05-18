@@ -889,7 +889,8 @@ focus(Client *c)
 		detachstack(c);
 		attachstack(c);
 		grabbuttons(c, 1);
-		wc.border_width = borderpx;
+		c->bw = borderpx;
+		wc.border_width = c->bw;
 		if (((nexttiled(c->mon->clients) == c && !nexttiled(c->next))
 					|| &monocle == c->mon->lt[c->mon->sellt]->arrange)
 				&& !c->isfullscreen && !c->isfloating) {
@@ -1150,7 +1151,9 @@ manage(Window w, XWindowAttributes *wa)
 	/* only fix client y-offset, if the client center might cover the bar */
 	c->y = MAX(c->y, ((c->mon->by == c->mon->my) && (c->x + (c->w / 2) >= c->mon->wx)
 		&& (c->x + (c->w / 2) < c->mon->wx + c->mon->ww)) ? bh : c->mon->my);
-	c->bw = unfocusedborderpx;
+	if(c->mon->sel == c)
+		c->bw = borderpx;
+	else c->bw = unfocusedborderpx;
 
 	wc.border_width = c->bw;
 	XConfigureWindow(dpy, w, CWBorderWidth, &wc);
@@ -1385,7 +1388,11 @@ resizeclient(Client *c, int x, int y, int w, int h)
 	c->oldy = c->y; c->y = wc.y = y;
 	c->oldw = c->w; c->w = wc.width = w;
 	c->oldh = c->h; c->h = wc.height = h;
-	wc.border_width = c->bw;
+	if(!(c->isfullscreen)){
+		if(c->mon->sel == c) c->bw = borderpx;
+		else c->bw = unfocusedborderpx;
+		wc.border_width = c->bw;
+	}
 	if (((nexttiled(c->mon->clients) == c && !nexttiled(c->next))
 	    || &monocle == c->mon->lt[c->mon->sellt]->arrange)
 	    && !c->isfullscreen && !c->isfloating) {
