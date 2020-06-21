@@ -9,38 +9,27 @@ shiftview(const Arg *arg)
 	Arg a;
 	Client *c;
 	unsigned visible = 0;
+	int i = arg->i;
 	int count = 0;
 	int nextseltags, curseltags = selmon->tagset[selmon->seltags];
 
-	if(!(curseltags && !(curseltags & (curseltags - 1)))) return;
-	nextseltags = curseltags;
-	do{
-		count++;
-		nextseltags = nextseltags << 1;
-		for (c = selmon->clients; c && !visible; c = c->next){
+	do {
+		if(i > 0) // left circular shift
+			nextseltags = (curseltags << i) | (curseltags >> (LENGTH(tags) - i));
+
+		else // right circular shift
+			nextseltags = curseltags >> (- i) | (curseltags << (LENGTH(tags) + i));
+
+                // Check if tag is visible
+		for (c = selmon->clients; c && !visible; c = c->next)
 			if (nextseltags & c->tags) {
 				visible = 1;
 				break;
 			}
-		}
-	} while((nextseltags <= LENGTH(tags))  && (!visible));
+		i += arg->i;
+	} while (!visible && ++count < 10);
 
-	if(!visible)
-		nextseltags = 1;
-	while(count<9 && (nextseltags < curseltags) && (!visible)){
-		count++;
-		for (c = selmon->clients; c && !visible; c = c->next){
-			if (nextseltags & c->tags) {
-				visible = 1;
-				break;
-			}
-		}
-		if(visible) break;
-		nextseltags = nextseltags << 1;
-	}
-
-
-	if (count < 9) {
+	if (count < 10) {
 		a.i = nextseltags;
 		view(&a);
 	}
@@ -50,20 +39,19 @@ minOpen(const Arg *arg)
 {
 	Arg a;
 	Client *c;
-	int visible[9] = {0,0,0,0,0,0,0,0,0};
-	int i;
+	int visible[10] = {0,0,0,0,0,0,0,0,0,0};
 
-	for(i=0;i<LENGTH(tags);i++){
+	for(int i=1;i<10;i++){
 		for(c = selmon->clients; c; c = c->next){
-			if((1<<i) & c->tags){
+			if(i & c->tags){
 				visible[i] = 1;
 				break;
 			}
 		}
 	}
-	for(i=0;i<LENGTH(tags);i++){
+	for(int i=1;i<10;i++){
 		if(!visible[i]){
-			a.i = (1<<i);
+			a.i = i;
 			view(&a);
 			break;
 		}

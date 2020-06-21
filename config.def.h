@@ -2,10 +2,8 @@
 
 /* appearance */
 static const unsigned int borderpx  = 2;        /* border pixel of windows */
-static const unsigned int unfocusedborderpx  = 0;        /* border pixel of unfocused windows */
 static const unsigned int gappx     = 10;        /* gaps between windows */
 static const unsigned int snap      = 32;       /* snap pixel */
-static const int swallowfloating    = 0;        /* 1 means swallow floating windows by default */
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
 static const char *fonts[] = {
@@ -30,7 +28,7 @@ static const char col_blue[]       = "#2b70f1";
 static const char *colors[][3]      = {
 	/*               fg         bg         border   */
 	[SchemeNorm] =	 { col_gray3, col_black,  col_gray2 },
-	[SchemeSel]  =	 { col_gray4, col_cyan,   col_cyan },
+	[SchemeSel]  =	 { col_gray4, col_gray1,   col_cyan },
 	[SchemeWarn] =	 { col_black, col_yellow, col_red },
 	[SchemeUrgent]=	 { col_white, col_red,    col_red },
 	[SchemeBlueFg] = { col_blue, col_black,  col_gray2 },
@@ -49,7 +47,7 @@ typedef struct {
 	const void *cmd;
 } Sp;
 const char *spcmd1[] = {"st", "-n", "spterm", "-g", "120x34", NULL };
-const char *spcmd2[] = {"st", "-n", "spcalc", "-f", "monospace:size=15", "-g", "80x24", "-e", "bc", "-lq", NULL };
+const char *spcmd2[] = {"st", "-n", "spcalc", "-f", "monospace:size=16", "-g", "50x20", "-e", "bc", "-lq", NULL };
 static Sp scratchpads[] = {
 	/* name          cmd  */
 	{"spterm",      spcmd1},
@@ -63,12 +61,11 @@ static const Rule rules[] = {
 	 *	WM_CLASS(STRING) = instance, class
 	 *	WM_NAME(STRING) = title
 	 */
-	/* class     instance  title           tags mask  isfloating  isterminal  noswallow  monitor */
-	{ "Gimp",    NULL,     NULL,           0,         1,          0,           0,        -1 },
-	{ "St",      NULL,     NULL,           0,         0,          1,          -1,        -1 },
-	{ NULL,      NULL,     "Event Tester", 0,         1,          0,           1,        -1 }, /* xev */
-	{ NULL,      "spterm",  NULL,	       SPTAG(0),  1,	      0, 	   0,        -1 },
-	{ NULL,      "spcalc",  NULL,	       SPTAG(1),  1,	      0, 	   0,        -1 },
+	/* class      instance    title       tags mask     isfloating   monitor */
+	{ "Gimp",	  NULL,			NULL,		0,				1,			 -1 },
+	{ "Firefox",  NULL,			NULL,		1 << 8,			0,			 -1 },
+	{ NULL,		  "spterm",		NULL,		SPTAG(0),		1,			 -1 },
+	{ NULL,		  "spcalc",		NULL,		SPTAG(1),		1,			 -1 },
 };
 
 /* layout(s) */
