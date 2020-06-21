@@ -22,14 +22,14 @@ My build of DWM contains the latest dwm core with important patches applied. In 
 
 ## Is dwm fastest WM?
 
-No. DWM is not fastest window manager in my experience.
+No. dwm is not the fastest window manager in my experience.
 
 ## Then why use dwm?
 
-dwm is most extensible WM. Anyone can extend it using patches and C-programming. It fits in our workflow and reduces the effort to manage window than any other window manager.
+Because it's most efficient window manager for any programmer's workflow. Focus on programming not window managing.
 
 Also, it fits in Unix philosphy not like i3wm that becomes a single point of failure(i.e., bloat)
 
 ## Why use my build?
 
-Because you will have to do approx 0 effort in managing windows then onwards!! Focus only on your work not windows.
+Because you will have to do approx zero effort in managing windows then onwards!! Focus only on your work not windows.
