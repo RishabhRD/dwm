@@ -2424,25 +2424,19 @@ minOpen(const Arg *arg)
 {
 	Arg a;
 	Client *c;
-	int visible[9] = {0,0,0,0,0,0,0,0,0};
+	int occ = 0;
 	int i;
 
-	for(i=0;i<LENGTH(tags);i++){
-		for(c = selmon->clients; c; c = c->next){
-			if((1<<i) & c->tags){
-				visible[i] = 1;
-				break;
-			}
-		}
+	for (c = selmon->clients; c; c = c->next) {
+		occ |= c->tags;
 	}
-	for(i=0;i<LENGTH(tags);i++){
-		if(!visible[i]){
-			a.i = (1<<i);
+	for (i = 0; i < LENGTH(tags); i++){
+		if(!(occ & (1 << i) )){
+			a.ui = (1 << i);
 			view(&a);
 			break;
 		}
 	}
-
 }
 
 int
