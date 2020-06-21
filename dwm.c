@@ -249,6 +249,8 @@ static int xerrordummy(Display *dpy, XErrorEvent *ee);
 static int xerrorstart(Display *dpy, XErrorEvent *ee);
 static void xinitvisual();
 static void zoom(const Arg *arg);
+static void shiftview(const Arg *arg);
+static void minOpen(const Arg *arg);
 
 /* variables */
 static const char broken[] = "broken";
@@ -2387,6 +2389,60 @@ zoom(const Arg *arg)
 		if (!c || !(c = nexttiled(c->next)))
 			return;
 	pop(c);
+}
+
+void
+shiftview(const Arg *arg)
+{
+	Arg a;
+	Client *c;
+	int occ = 0;
+	int curseltags = selmon->tagset[selmon->seltags];
+	int i;
+	int max = 0;
+	for(i = 0;i<LENGTH(tags); i++){
+		if ((1<<i)&curseltags){
+			max = i;
+		}
+	}
+	for (c = selmon->clients; c; c = c->next) {
+		occ |= c->tags;
+	}
+	for(i = 0; i < LENGTH(tags); i++){
+		max++;
+		if(!(occ & (1 << (max % LENGTH(tags))) || selmon->tagset[selmon->seltags] & (1 << (max % LENGTH(tags)))))
+			continue;
+		a.ui = 1 << (max % LENGTH(tags));
+		view(&a);
+		break;
+		
+	}
+}
+
+void
+minOpen(const Arg *arg)
+{
+	Arg a;
+	Client *c;
+	int visible[9] = {0,0,0,0,0,0,0,0,0};
+	int i;
+
+	for(i=0;i<LENGTH(tags);i++){
+		for(c = selmon->clients; c; c = c->next){
+			if((1<<i) & c->tags){
+				visible[i] = 1;
+				break;
+			}
+		}
+	}
+	for(i=0;i<LENGTH(tags);i++){
+		if(!visible[i]){
+			a.i = (1<<i);
+			view(&a);
+			break;
+		}
+	}
+
 }
 
 int
