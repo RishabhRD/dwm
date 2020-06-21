@@ -34,24 +34,26 @@ shiftview(const Arg *arg)
 		view(&a);
 	}
 }
+
 void
 minOpen(const Arg *arg)
 {
 	Arg a;
 	Client *c;
-	int visible[10] = {0,0,0,0,0,0,0,0,0,0};
+	int visible[9] = {0,0,0,0,0,0,0,0,0};
+	int i;
 
-	for(int i=1;i<10;i++){
+	for(i=0;i<LENGTH(tags);i++){
 		for(c = selmon->clients; c; c = c->next){
-			if(i & c->tags){
+			if((1<<i) & c->tags){
 				visible[i] = 1;
 				break;
 			}
 		}
 	}
-	for(int i=1;i<10;i++){
+	for(i=0;i<LENGTH(tags);i++){
 		if(!visible[i]){
-			a.i = i;
+			a.i = (1<<i);
 			view(&a);
 			break;
 		}
