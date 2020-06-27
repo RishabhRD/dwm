@@ -36,10 +36,10 @@ static const char *colors[][3]      = {
 };
 static const unsigned int alphas[][3]      = {
 	/*               fg      bg        border     */
-	[SchemeNorm] = { OPAQUE, baralpha, borderalpha },
-	[SchemeSel]  = { OPAQUE, baralpha, borderalpha },
-	[SchemeBlueFg]  = { OPAQUE, baralpha, borderalpha },
-	[SchemeTitle]  = { OPAQUE, baralpha,  borderalpha  },
+	[SchemeNorm] = { OPAQUE, OPAQUE, borderalpha },
+	[SchemeSel]  = { OPAQUE, OPAQUE, borderalpha },
+	[SchemeBlueFg]  = { OPAQUE, OPAQUE, borderalpha },
+	[SchemeTitle]  = { OPAQUE, OPAQUE,  borderalpha  },
 };
 
 typedef struct {
