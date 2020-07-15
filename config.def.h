@@ -2,7 +2,7 @@
 
 /* appearance */
 static const unsigned int borderpx  = 2;        /* border pixel of windows */
-static const unsigned int gappx     = 8;        /* gaps between windows */
+static const unsigned int gappx     = 0;        /* gaps between windows */
 static const unsigned int snap      = 32;       /* snap pixel */
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
@@ -61,11 +61,11 @@ static const Rule rules[] = {
 	 *	WM_CLASS(STRING) = instance, class
 	 *	WM_NAME(STRING) = title
 	 */
-	/* class      instance    title       tags mask     isfloating   monitor */
-	{ "Gimp",	  NULL,			NULL,		0,				1,			 -1 },
-	{ "Firefox",  NULL,			NULL,		1 << 8,			0,			 -1 },
-	{ NULL,		  "spterm",		NULL,		SPTAG(0),		1,			 -1 },
-	{ NULL,		  "spcalc",		NULL,		SPTAG(1),		1,			 -1 },
+	/* class      instance    title       tags mask     isfloating   monitor    float x,y,w,h         floatborderpx*/
+	{ "Gimp",     NULL,       NULL,       0,            1,           -1,        50,50,500,500,        1 },
+	{ NULL,		  "spterm",		NULL,		SPTAG(0),		1,			 -1 , 400,240,1050,650, 		  1},
+	{ NULL,		  "spcalc",		NULL,		SPTAG(1),		1,			 -1 ,600,240,700,650,             1},
+	{ NULL,NULL,		"webcam",		0,		1,			 -1 ,1980,0,290,290 ,            1},
 };
 
 /* layout(s) */

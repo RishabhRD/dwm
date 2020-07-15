@@ -98,6 +98,7 @@ struct Client {
 	int bw, oldbw;
 	unsigned int tags;
 	int isfixed, isfloating, isurgent, neverfocus, oldstate, isfullscreen, issticky;
+	int floatborderpx;
 	Client *next;
 	Client *snext;
 	Monitor *mon;
@@ -147,6 +148,8 @@ typedef struct {
 	unsigned int tags;
 	int isfloating;
 	int monitor;
+	int floatx, floaty, floatw, floath;
+	int floatborderpx;
 } Rule;
 
 /* function declarations */
@@ -333,10 +336,17 @@ applyrules(Client *c)
 		{
 			c->isfloating = r->isfloating;
 			c->tags |= r->tags;
-			if ((r->tags & SPTAGMASK) && r->isfloating) {
-				c->x = c->mon->wx + (c->mon->ww / 2 - WIDTH(c) / 2);
-				c->y = c->mon->wy + (c->mon->wh / 2 - HEIGHT(c) / 2);
+			c->floatborderpx = r->floatborderpx;
+			if (r->isfloating) {
+				c->x = r->floatx;
+				c->y = r->floaty;
+				c->w = r->floatw;
+				c->h = r->floath;
 			}
+			/* if ((r->tags & SPTAGMASK) && r->isfloating) { */
+			/* 	c->x = c->mon->wx + (c->mon->ww / 2 - WIDTH(c) / 2); */
+			/* 	c->y = c->mon->wy + (c->mon->wh / 2 - HEIGHT(c) / 2); */
+			/* } */
 
 			for (m = mons; m && m->num != r->monitor; m = m->next);
 			if (m)
@@ -1377,7 +1387,10 @@ resizeclient(Client *c, int x, int y, int w, int h)
 	c->oldy = c->y; c->y = wc.y = y;
 	c->oldw = c->w; c->w = wc.width = w;
 	c->oldh = c->h; c->h = wc.height = h;
-	wc.border_width = c->bw;
+	if (c->isfloating)
+		wc.border_width = c->floatborderpx;
+	else
+		wc.border_width = c->bw;
 	if (((nexttiled(c->mon->clients) == c && !nexttiled(c->next))
 	    || &monocle == c->mon->lt[c->mon->sellt]->arrange)
 	    && !c->isfullscreen && !c->isfloating
@@ -1734,10 +1747,10 @@ showhide(Client *c)
 	if (!c)
 		return;
 	if (ISVISIBLE(c)) {
-		if ((c->tags & SPTAGMASK) && c->isfloating) {
-			c->x = c->mon->wx + (c->mon->ww / 2 - WIDTH(c) / 2);
-			c->y = c->mon->wy + (c->mon->wh / 2 - HEIGHT(c) / 2);
-		}
+		/* if ((c->tags & SPTAGMASK) && c->isfloating) { */
+		/* 	c->x = c->mon->wx + (c->mon->ww / 2 - WIDTH(c) / 2); */
+		/* 	c->y = c->mon->wy + (c->mon->wh / 2 - HEIGHT(c) / 2); */
+		/* } */
 		/* show clients top down */
 		XMoveWindow(dpy, c->win, c->x, c->y);
 		if ((!c->mon->lt[c->mon->sellt]->arrange || c->isfloating) && !c->isfullscreen)
