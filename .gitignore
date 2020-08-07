@@ -4,3 +4,4 @@ dwm
 config.h
 *.orig
 *.rej
+diff
